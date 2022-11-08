@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/main.css" type="text/css">
+    <title>summarizer</title>
+
+  </head>
+   
+    
+  <body>
+
+    {% if count %}
+    <div class="output-header">
+        <h2>Video name : {{file_name}}</h2>
+    </div>
+    <div style="width: 1400px; height: auto; margin: 0 auto;">
+    {% for i in range(count) %}
+
+        <div class="frame-container">
+        
+            <div class="img-caption-holder">
+                <img class="img-holder" src="{{folder[i]}}" alt="cluster-1" width="512px" height="auto">
+                <p class="caption-holder">{{cap[i]}}</p>
+            </div>
+        </div>
+
+    {% endfor %}
+  </div>
+
+{% endif %}
+        
+
+
+
+
+  </body>
+
+</html>

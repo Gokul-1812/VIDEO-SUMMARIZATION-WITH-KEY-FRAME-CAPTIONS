@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/main.css" type="text/css">
+
+    <title>Summarizer</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+
+
+
+</head>
+
+
+<body background="/static/2.jpg">
+    <div>
+        <header>
+            <h1>Video Summarizer with Key Frames</h1>
+        </header>
+    </div>
+
+    <div class="new-container">
+
+        <form class="form" id="send-video" action="{{ url_for('start_summ')}}" method="POST" enctype="multipart/form-data">
+            <div class="file-upload-wrapper" data-text="Select your file!">
+                <input name="video" id="video-file" type="file" class="file-upload-field" value="">
+            </div>
+
+
+            <span style="display: none;" class="loader "></span>
+
+
+        </form>
+    </div>
+
+
+
+    <div id="result_images"></div>
+    <div id="result_videos"></div>
+
+
+
+
+
+</body>
+
+
+<script>
+    $("form").on("change", ".file-upload-field", function() {
+        $(this).parent(".file-upload-wrapper").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
+        $('#send-video').trigger('submit');
+    });
+
+
+
+    $(document).on('submit', '#send-video', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData($("#send-video")[0]);
+        var form_url = $('#send-video').attr('action');
+
+        var result_xhr = $.ajax({
+            url: form_url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = parseInt((evt.loaded / evt.total) * 100);
+
+                    }
+                }, false);
+                return xhr;
+            },
+            beforeSend: function() {
+                $(".loader").show();
+
+            }
+        })
+
+        result_xhr.done(function(data) {
+            $(".loader").hide();
+            document.getElementById('result_images').innerHTML = "";
+            document.getElementById('result_videos').innerHTML = "";
+
+            if (data.status == 500) {
+                alert(data.status_msg);
+            } else if (data.status == 200) {
+
+                data.imgs.forEach(path => {
+                    document.getElementById('result_images').innerHTML += '<img src="/img?file=' + path + '"/>'
+                });
+
+                data.videos.forEach(path => {
+                    document.getElementById('result_videos').innerHTML += ' <video width="320" height="240" controls><source src="/vids?file=' + path + '" type="video/mp4"></video> '
+                });
+                Swal.fire({
+                    icon: 'success',
+                    title: "Key Frame Generated "
+                });
+            } else {
+                alert('Something is wrong in the server');
+            }
+        });
+
+        result_xhr.fail(function() {
+            $(".loader").hide();
+            alert('Page has expired, try later !');
+        });
+
+    });
+</script>
+
+</html>

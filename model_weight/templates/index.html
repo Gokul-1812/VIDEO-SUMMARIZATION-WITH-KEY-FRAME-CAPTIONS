@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/main.css" type="text/css">
+
+    <title>summarizer</title>
+
+  </head>
+   
+    
+  <body>
+
+    <div class="header-div">
+      <h1>
+        <span style="font-family: 'Open Sans', sans-serif; font-weight: 800;">
+          VIDEO</span><span style="margin-left: 20px; font-family: 'Open Sans', sans-serif;font-weight: 300;">SUMMARIZER</span>
+      </h1>
+    </div>
+        
+
+    <div class="upload-div">
+      <form id = "send-video" action="{{ url_for('start_summ')}}" method="POST" enctype="multipart/form-data">
+        <label style="width: 200px;height: auto;margin: 0 auto;display: flex;">
+          <img src="../static/upload-button.png" alt="upload video" style="width: 200px;">
+          <input type="file" id="video-file" name="video" style="display: none;">
+        </label>
+        <br><br>
+        <button id="submit-button" class="button-style" >START SUMMARIZER</button>
+      </form>
+    </div>
+
+  </body>
+  <!-- <script>
+    function submit_clicked(){
+      document.getElementById("send-video").submit();
+      document.getElementById("submit-button").disabled = true; 
+      return true
+    }
+  </script> -->
+
+</html>
